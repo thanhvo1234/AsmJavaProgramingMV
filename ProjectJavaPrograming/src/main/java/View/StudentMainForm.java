@@ -422,9 +422,9 @@ public class StudentMainForm extends javax.swing.JFrame {
                 txtEmail.setText(st.getEmail());
                 boolean s = st.isSex();
                  if(st.isSex()){
-                    rdMale.isSelected(); 
+                    rdMale.setSelected(true); 
                 }else{
-                    rdFemale.isSelected();
+                    rdFemale.setSelected(true);
                 }
                 
             }
@@ -453,8 +453,7 @@ public class StudentMainForm extends javax.swing.JFrame {
 
         if (validateForm()){
             
-            if (!(Pattern.matches("^[a-zA-Z0-9]+[@]{1}+[a-zA-Z0-9]+[.]{1}+[a-zA-Z0-9]+$", txtEmail.getText()))){
-            JOptionPane.showMessageDialog(null, "Please enter a valid email", "Error", JOptionPane.ERROR_MESSAGE);
+            
             try {              
                 Student st = getModel();
                 if(dao.add(st)>0){
@@ -464,9 +463,12 @@ public class StudentMainForm extends javax.swing.JFrame {
             } catch (ParseException ex) {
                 Logger.getLogger(StudentMainForm.class.getName()).log(Level.SEVERE, null, ex);
             }
-            }
+            
         }else{
             JOptionPane.showMessageDialog(this, "You have not entered enough information");
+        }
+        if (!(Pattern.matches("^[a-zA-Z0-9]+[@]{1}+[a-zA-Z0-9]+[.]{1}+[a-zA-Z0-9]+$", txtEmail.getText()))){
+            JOptionPane.showMessageDialog(null, "Please enter a valid email", "Error", JOptionPane.ERROR_MESSAGE);
         }
         
             
@@ -476,8 +478,7 @@ public class StudentMainForm extends javax.swing.JFrame {
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
         if (validateForm()){
-            if (!(Pattern.matches("^[a-zA-Z0-9]+[@]{1}+[a-zA-Z0-9]+[.]{1}+[a-zA-Z0-9]+$", txtEmail.getText()))){
-            JOptionPane.showMessageDialog(null, "Please enter a valid email", "Error", JOptionPane.ERROR_MESSAGE);
+           
             try {
                 Student st = getModel();
                 if (dao.updateStudentByID(st)>0){
@@ -487,9 +488,12 @@ public class StudentMainForm extends javax.swing.JFrame {
             } catch (ParseException ex) {
                 Logger.getLogger(StudentMainForm.class.getName()).log(Level.SEVERE, null, ex);
             }
-            }
+            
         }else{
             JOptionPane.showMessageDialog(this, "you have not entered information");
+        }
+        if (!(Pattern.matches("^[a-zA-Z0-9]+[@]{1}+[a-zA-Z0-9]+[.]{1}+[a-zA-Z0-9]+$", txtEmail.getText()))){
+            JOptionPane.showMessageDialog(null, "Please enter a valid email", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
@@ -527,9 +531,9 @@ public class StudentMainForm extends javax.swing.JFrame {
         txtEmail.setText(st.getEmail());
         boolean s = st.isSex();
         if(st.isSex()){
-            rdMale.isSelected();
+            rdMale.setSelected(true);
         }else{
-            rdFemale.isSelected();
+            rdFemale.setSelected(true);
         }
     }
     private void tbStudentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbStudentMouseClicked
