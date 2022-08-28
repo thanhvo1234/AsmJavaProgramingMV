@@ -5,17 +5,43 @@
  */
 package View;
 
+import Model.Student;
+import Model.StudentDAO;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author thanh
  */
 public class StudentMainForm extends javax.swing.JFrame {
-
+    SimpleDateFormat date_format = new SimpleDateFormat("dd/MM/yyyy");
+    StudentDAO dao = new StudentDAO();
+    StudentDAO stDAO = new StudentDAO();
     /**
      * Creates new form StudentMainForm
      */
     public StudentMainForm() {
         initComponents();
+    }
+    public void fillDataTABLE(){
+        DefaultTableModel model = (DefaultTableModel)tbStudent.getModel();
+        model.setRowCount(0);//clear table
+        for (Student st : dao.getAllStudent()){
+            Object rowData[] = new Object[6];
+            rowData[0]=st.getStudentId();
+            rowData[1]=st.getName();
+            rowData[2]=date_format.format(st.getBirthday());
+            rowData[3]=st.isSex()? "Male":"Female";
+            rowData[4]=st.getEmail();
+            rowData[5]=st.getAddress();
+            model.addRow(rowData);
+        }
     }
 
     /**
@@ -30,6 +56,7 @@ public class StudentMainForm extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         buttonGroup1 = new javax.swing.ButtonGroup();
+        jPopupMenu1 = new javax.swing.JPopupMenu();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtStudentId = new javax.swing.JTextField();
@@ -55,7 +82,7 @@ public class StudentMainForm extends javax.swing.JFrame {
         txtAddress = new javax.swing.JTextArea();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tbStudent = new javax.swing.JTable();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -213,26 +240,29 @@ public class StudentMainForm extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnSave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(16, 16, 16))
+                    .addComponent(btnAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSave)
-                    .addComponent(btnAdd))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnDelete)
-                    .addComponent(btnUpdate))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -245,7 +275,7 @@ public class StudentMainForm extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel8.setText("Address:");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tbStudent.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -256,7 +286,12 @@ public class StudentMainForm extends javax.swing.JFrame {
                 "Student ID", "Name", "Birthday", "Sex", "Email", "Address"
             }
         ));
-        jScrollPane3.setViewportView(jTable2);
+        tbStudent.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbStudentMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tbStudent);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -317,7 +352,7 @@ public class StudentMainForm extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(7, 7, 7)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 197, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 191, Short.MAX_VALUE)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(16, 16, 16))
                     .addGroup(layout.createSequentialGroup()
@@ -350,29 +385,127 @@ public class StudentMainForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    public void reset(){
+        txtStudentId.setText("");
+        txtAddress.setText("");
+        txtName.setText("");
+        txtBirthday.setText("");
+        rdMale.isSelected();
+        txtEmail.setText("");
+    }
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
+        reset();
     }//GEN-LAST:event_btnAddActionPerformed
-
+    public boolean validateForm(){
+        if (txtStudentId.getText().isEmpty() || txtName.getText().isEmpty()
+                || txtBirthday.getText().isEmpty()|| rdMale.getText().isEmpty()|| rdFemale.getText().isEmpty()|| txtAddress.getText().isEmpty()
+                || txtEmail.getText().isEmpty()){
+            return false;
+        }
+        return true;
+       
+    }
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         // TODO add your handling code here:
+        if (txtFind.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, "You have not entered your student code");
+            
+        }else{
+            Student st = stDAO.getStudentByID(txtFind.getText());
+            if (st !=null){ //other null means found.
+                
+                txtStudentId.setText(st.getStudentId());
+                txtName.setText(st.getName());
+                txtBirthday.setText(date_format.format(st.getBirthday()));
+                txtAddress.setText(st.getAddress());
+                txtEmail.setText(st.getEmail());
+                boolean s = st.isSex();
+                 if(st.isSex()){
+                    rdMale.isSelected(); 
+                }else{
+                    rdFemale.isSelected();
+                }
+                
+            }
+        }
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void txtFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFindActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFindActionPerformed
-
+    public Student getModel() throws ParseException{
+        Student st = new Student();
+        st.setStudentId(txtStudentId.getText());
+        st.setName(txtName.getText());
+        boolean s = false;
+        if (rdMale.isSelected()){
+            s = true;
+        }
+        st.setSex(s);
+        st.setAddress(txtAddress.getText());
+        st.setBirthday(date_format.parse(txtBirthday.getText()));
+        st.setEmail(txtEmail.getText());
+        return st;
+    }
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
+
+        if (validateForm()){
+            
+            if (!(Pattern.matches("^[a-zA-Z0-9]+[@]{1}+[a-zA-Z0-9]+[.]{1}+[a-zA-Z0-9]+$", txtEmail.getText()))){
+            JOptionPane.showMessageDialog(null, "Please enter a valid email", "Error", JOptionPane.ERROR_MESSAGE);
+            try {              
+                Student st = getModel();
+                if(dao.add(st)>0){
+                    JOptionPane.showMessageDialog(this, "Save successfully");
+                    fillDataTABLE();
+                }
+            } catch (ParseException ex) {
+                Logger.getLogger(StudentMainForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "You have not entered enough information");
+        }
+        
+            
+
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
+        if (validateForm()){
+            if (!(Pattern.matches("^[a-zA-Z0-9]+[@]{1}+[a-zA-Z0-9]+[.]{1}+[a-zA-Z0-9]+$", txtEmail.getText()))){
+            JOptionPane.showMessageDialog(null, "Please enter a valid email", "Error", JOptionPane.ERROR_MESSAGE);
+            try {
+                Student st = getModel();
+                if (dao.updateStudentByID(st)>0){
+                    JOptionPane.showMessageDialog(this, "Update successfully");
+                    fillDataTABLE();
+                }
+            } catch (ParseException ex) {
+                Logger.getLogger(StudentMainForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "you have not entered information");
+        }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
+        if (txtStudentId.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, "You have not entered information to delete");
+            
+        }else{
+            if (dao.delStudentById(txtStudentId.getText())>0){
+                JOptionPane.showMessageDialog(this, "Delete successfully");
+                fillDataTABLE();
+            }else{
+                JOptionPane.showMessageDialog(this, "Can't find students to delete");
+            }
+        }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void txtBirthdayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBirthdayActionPerformed
@@ -386,6 +519,26 @@ public class StudentMainForm extends javax.swing.JFrame {
     private void rdFemaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdFemaleActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_rdFemaleActionPerformed
+    public void setModel(Student st){
+        txtStudentId.setText(st.getStudentId());
+        txtName.setText(st.getName());
+        txtBirthday.setText(date_format.format(st.getBirthday()));
+        txtAddress.setText(st.getAddress());
+        txtEmail.setText(st.getEmail());
+        boolean s = st.isSex();
+        if(st.isSex()){
+            rdMale.isSelected();
+        }else{
+            rdFemale.isSelected();
+        }
+    }
+    private void tbStudentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbStudentMouseClicked
+        // TODO add your handling code here:
+        int id = tbStudent.rowAtPoint(evt.getPoint());
+        String studentid = tbStudent.getValueAt(id,0).toString();
+        Student st = dao.getStudentByID(studentid);
+        setModel(st);
+    }//GEN-LAST:event_tbStudentMouseClicked
 
     /**
      * @param args the command line arguments
@@ -439,13 +592,14 @@ public class StudentMainForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JRadioButton rdFemale;
     private javax.swing.JRadioButton rdMale;
+    private javax.swing.JTable tbStudent;
     private javax.swing.JTextArea txtAddress;
     private javax.swing.JTextField txtBirthday;
     private javax.swing.JTextField txtEmail;
