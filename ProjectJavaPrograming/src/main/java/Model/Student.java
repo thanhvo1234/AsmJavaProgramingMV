@@ -5,13 +5,14 @@
  */
 package Model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author thanh
  */
-public class Student {
+public class Student implements Serializable{
     private String StudentId;
     private String name;
     private Date birthday;
@@ -79,11 +80,4 @@ public class Student {
         this.email = email;
     }
 
-    
-    
-    
-
-    public Student(String StudentId) {
-        this.StudentId = StudentId;
-    }
 }

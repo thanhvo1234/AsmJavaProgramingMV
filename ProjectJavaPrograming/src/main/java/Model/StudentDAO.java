@@ -12,8 +12,8 @@ import java.util.List;
  *
  * @author thanh
  */
-public class StudentDAO {
-    public static List <Student> ls = new ArrayList<>();
+public class StudentDAO extends Student{
+    public ArrayList <Student> ls = new ArrayList<>();
     public int add(Student st){
         ls.add(st);
         return 1;

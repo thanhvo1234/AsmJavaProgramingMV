@@ -7,6 +7,11 @@ package View;
 
 import Model.Student;
 import Model.StudentDAO;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
@@ -22,12 +27,12 @@ import javax.swing.table.DefaultTableModel;
 public class StudentMainForm extends javax.swing.JFrame {
     SimpleDateFormat date_format = new SimpleDateFormat("dd/MM/yyyy");
     StudentDAO dao = new StudentDAO();
-    StudentDAO stDAO = new StudentDAO();
     /**
      * Creates new form StudentMainForm
      */
     public StudentMainForm() {
         initComponents();
+        openFile();
     }
     public void fillDataTABLE(){
         DefaultTableModel model = (DefaultTableModel)tbStudent.getModel();
@@ -83,6 +88,8 @@ public class StudentMainForm extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tbStudent = new javax.swing.JTable();
+        btn_SaveFile = new javax.swing.JButton();
+        btn_OpenFile = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -293,6 +300,20 @@ public class StudentMainForm extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(tbStudent);
 
+        btn_SaveFile.setText("Save file");
+        btn_SaveFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_SaveFileActionPerformed(evt);
+            }
+        });
+
+        btn_OpenFile.setText("Open File");
+        btn_OpenFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_OpenFileActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -340,6 +361,12 @@ public class StudentMainForm extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 936, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btn_SaveFile)
+                .addGap(42, 42, 42)
+                .addComponent(btn_OpenFile)
+                .addGap(216, 216, 216))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -347,7 +374,11 @@ public class StudentMainForm extends javax.swing.JFrame {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(69, 69, 69)
+                .addGap(32, 32, 32)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_SaveFile)
+                    .addComponent(btn_OpenFile))
+                .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(7, 7, 7)
@@ -412,7 +443,7 @@ public class StudentMainForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "You have not entered your student code");
             
         }else{
-            Student st = stDAO.getStudentByID(txtFind.getText());
+            Student st = dao.getStudentByID(txtFind.getText());
             if (st !=null){ //other null means found.
                 
                 txtStudentId.setText(st.getStudentId());
@@ -453,23 +484,28 @@ public class StudentMainForm extends javax.swing.JFrame {
 
         if (validateForm()){
             
+            if ((Pattern.matches("^[a-zA-Z0-9]+[@]{1}+[a-zA-Z0-9]+[.]{1}+[a-zA-Z0-9]+$", txtEmail.getText()))){
             
-            try {              
-                Student st = getModel();
-                if(dao.add(st)>0){
-                    JOptionPane.showMessageDialog(this, "Save successfully");
-                    fillDataTABLE();
+        
+                try {              
+                    Student st = getModel();
+                    if(dao.add(st)>0){
+                        JOptionPane.showMessageDialog(this, "Save successfully");
+                        fillDataTABLE();
+                    }
+                } catch (ParseException ex) {
+                    Logger.getLogger(StudentMainForm.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } catch (ParseException ex) {
-                Logger.getLogger(StudentMainForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Please enter a valid email", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
             
         }else{
             JOptionPane.showMessageDialog(this, "You have not entered enough information");
         }
-        if (!(Pattern.matches("^[a-zA-Z0-9]+[@]{1}+[a-zA-Z0-9]+[.]{1}+[a-zA-Z0-9]+$", txtEmail.getText()))){
-            JOptionPane.showMessageDialog(null, "Please enter a valid email", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        
         
             
 
@@ -478,22 +514,22 @@ public class StudentMainForm extends javax.swing.JFrame {
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
         if (validateForm()){
-           
-            try {
-                Student st = getModel();
-                if (dao.updateStudentByID(st)>0){
+           if ((Pattern.matches("^[a-zA-Z0-9]+[@]{1}+[a-zA-Z0-9]+[.]{1}+[a-zA-Z0-9]+$", txtEmail.getText()))){
+                try {
+                    Student st = getModel();
+                    if (dao.updateStudentByID(st)>0){
                     JOptionPane.showMessageDialog(this, "Update successfully");
                     fillDataTABLE();
+                    }
+                } catch (ParseException ex) {
+                    Logger.getLogger(StudentMainForm.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } catch (ParseException ex) {
-                Logger.getLogger(StudentMainForm.class.getName()).log(Level.SEVERE, null, ex);
-            }
             
+            }else{
+                JOptionPane.showMessageDialog(this, "you have not entered information");
+            }
         }else{
-            JOptionPane.showMessageDialog(this, "you have not entered information");
-        }
-        if (!(Pattern.matches("^[a-zA-Z0-9]+[@]{1}+[a-zA-Z0-9]+[.]{1}+[a-zA-Z0-9]+$", txtEmail.getText()))){
-            JOptionPane.showMessageDialog(null, "Please enter a valid email", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "You have not entered enough information");
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
@@ -512,6 +548,54 @@ public class StudentMainForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
+     private void wrFile(){
+            FileOutputStream fos = null;
+            ObjectOutputStream oos = null;
+            try{
+            fos = new FileOutputStream("thanh.txt");
+            oos = new ObjectOutputStream(fos);
+            oos.writeObject(dao);
+            }catch(Exception e){
+                e.printStackTrace();
+            }finally{
+                try{
+                    oos.close();
+                    fos.close();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+    }
+    
+    private void rFile(){
+            FileInputStream fis = null;
+            ObjectInputStream ois = null;
+            try{
+            fis = new FileInputStream("thanh.txt");
+            ois = new ObjectInputStream(fis);
+            dao = (StudentDAO)ois.readObject();
+            }catch(FileNotFoundException e){
+                   JOptionPane.showConfirmDialog(this, "Not data ");
+
+            }catch(Exception e){
+                e.printStackTrace();
+            }finally{
+                try{
+                    if(ois!=null && fis!=null){
+                        ois.close();
+                        fis.close();
+                    }
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+    }
+    private void openFile(){
+        
+        rFile();
+        fillDataTABLE();
+    }
+    
     private void txtBirthdayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBirthdayActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtBirthdayActionPerformed
@@ -543,6 +627,17 @@ public class StudentMainForm extends javax.swing.JFrame {
         Student st = dao.getStudentByID(studentid);
         setModel(st);
     }//GEN-LAST:event_tbStudentMouseClicked
+
+    private void btn_SaveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_SaveFileActionPerformed
+        // TODO add your handling code here:
+        wrFile();
+        JOptionPane.showMessageDialog(this, "Save file sucessfully");
+    }//GEN-LAST:event_btn_SaveFileActionPerformed
+
+    private void btn_OpenFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_OpenFileActionPerformed
+        // TODO add your handling code here:
+        openFile();
+    }//GEN-LAST:event_btn_OpenFileActionPerformed
 
     /**
      * @param args the command line arguments
@@ -585,6 +680,8 @@ public class StudentMainForm extends javax.swing.JFrame {
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
+    private javax.swing.JButton btn_OpenFile;
+    private javax.swing.JButton btn_SaveFile;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
