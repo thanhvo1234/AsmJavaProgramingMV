@@ -25,16 +25,13 @@ import javax.swing.table.DefaultTableModel;
  * @author thanh
  */
 public class StudentMainForm extends javax.swing.JFrame {
-    SimpleDateFormat date_format = new SimpleDateFormat("dd/MM/yyyy");
-    StudentDAO dao = new StudentDAO();
+    SimpleDateFormat date_format = new SimpleDateFormat("dd/MM/yyyy"); //create 1 variable format by day/month/year
+    StudentDAO dao = new StudentDAO(); 
     /**
      * Creates new form StudentMainForm
      */
-    public StudentMainForm() {
-        initComponents();
-        openFile();
-    }
-    public void fillDataTABLE(){
+    
+    public void fillDataTABLE(){ 
         DefaultTableModel model = (DefaultTableModel)tbStudent.getModel();
         model.setRowCount(0);//clear table
         for (Student st : dao.getAllStudent()){
@@ -47,6 +44,11 @@ public class StudentMainForm extends javax.swing.JFrame {
             rowData[5]=st.getAddress();
             model.addRow(rowData);
         }
+    }
+    
+    public StudentMainForm() {
+        initComponents();
+        openFile();
     }
 
     /**
@@ -69,7 +71,7 @@ public class StudentMainForm extends javax.swing.JFrame {
         txtBirthday = new javax.swing.JTextField();
         txtEmail = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
-        txtFind = new javax.swing.JTextField();
+        txtfind = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         btnSearch = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
@@ -129,10 +131,10 @@ public class StudentMainForm extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        txtFind.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtFind.addActionListener(new java.awt.event.ActionListener() {
+        txtfind.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtfind.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFindActionPerformed(evt);
+                txtfindActionPerformed(evt);
             }
         });
 
@@ -156,7 +158,7 @@ public class StudentMainForm extends javax.swing.JFrame {
                 .addContainerGap(59, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addGap(40, 40, 40)
-                .addComponent(txtFind, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtfind, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(46, 46, 46)
                 .addComponent(btnSearch)
                 .addGap(36, 36, 36))
@@ -167,7 +169,7 @@ public class StudentMainForm extends javax.swing.JFrame {
                 .addGap(23, 23, 23)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtFind, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtfind, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
@@ -300,6 +302,8 @@ public class StudentMainForm extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(tbStudent);
 
+        btn_SaveFile.setBackground(new java.awt.Color(255, 255, 255));
+        btn_SaveFile.setForeground(new java.awt.Color(0, 0, 0));
         btn_SaveFile.setText("Save file");
         btn_SaveFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -307,6 +311,8 @@ public class StudentMainForm extends javax.swing.JFrame {
             }
         });
 
+        btn_OpenFile.setBackground(new java.awt.Color(255, 255, 255));
+        btn_OpenFile.setForeground(new java.awt.Color(0, 0, 0));
         btn_OpenFile.setText("Open File");
         btn_OpenFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -323,7 +329,10 @@ public class StudentMainForm extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(449, 449, 449)
+                                .addComponent(btn_SaveFile)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btn_OpenFile)
+                                .addGap(284, 284, 284)
                                 .addComponent(jLabel1))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(125, 125, 125)
@@ -361,24 +370,20 @@ public class StudentMainForm extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 936, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btn_SaveFile)
-                .addGap(42, 42, 42)
-                .addComponent(btn_OpenFile)
-                .addGap(216, 216, 216))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btn_SaveFile)
+                            .addComponent(btn_OpenFile))))
                 .addGap(5, 5, 5)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_SaveFile)
-                    .addComponent(btn_OpenFile))
-                .addGap(15, 15, 15)
+                .addGap(69, 69, 69)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(7, 7, 7)
@@ -439,35 +444,39 @@ public class StudentMainForm extends javax.swing.JFrame {
     }
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         // TODO add your handling code here:
-        if (txtFind.getText().isEmpty()){
+        try {
+            if (txtfind.getText().isEmpty()){
             JOptionPane.showMessageDialog(this, "You have not entered your student code");
             
-        }else{
-            Student st = dao.getStudentByID(txtFind.getText());
-            if (st !=null){ //other null means found.
+            }else{
+            Student st = dao.getStudentByID(Integer.parseInt(txtfind.getText()));
+                if (st !=null){ //other null means found.
                 
-                txtStudentId.setText(st.getStudentId());
+                txtStudentId.setText(st.getStudentId()+"");
                 txtName.setText(st.getName());
                 txtBirthday.setText(date_format.format(st.getBirthday()));
                 txtAddress.setText(st.getAddress());
                 txtEmail.setText(st.getEmail());
                 boolean s = st.isSex();
-                 if(st.isSex()){
+                    if(st.isSex()){
                     rdMale.setSelected(true); 
-                }else{
+                    }else{
                     rdFemale.setSelected(true);
-                }
+                    }
                 
+                }
             }
-        }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "you must type id with Integer datatype");
+        }   
     }//GEN-LAST:event_btnSearchActionPerformed
 
-    private void txtFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFindActionPerformed
+    private void txtfindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtfindActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtFindActionPerformed
-    public Student getModel() throws ParseException{
+    }//GEN-LAST:event_txtfindActionPerformed
+    public Student getModel() throws NumberFormatException, ParseException{
         Student st = new Student();
-        st.setStudentId(txtStudentId.getText());
+        st.setStudentId(Integer.parseInt(txtStudentId.getText()));
         st.setName(txtName.getText());
         boolean s = false;
         if (rdMale.isSelected()){
@@ -479,57 +488,67 @@ public class StudentMainForm extends javax.swing.JFrame {
         st.setEmail(txtEmail.getText());
         return st;
     }
+    
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
 
-        if (validateForm()){
+        try {
+            if (validateForm()){
             
-            if ((Pattern.matches("^[a-zA-Z0-9]+[@]{1}+[a-zA-Z0-9]+[.]{1}+[a-zA-Z0-9]+$", txtEmail.getText()))){
-            
-        
-                try {              
-                    Student st = getModel();
-                    if(dao.add(st)>0){
-                        JOptionPane.showMessageDialog(this, "Save successfully");
-                        fillDataTABLE();
-                    }
-                } catch (ParseException ex) {
-                    Logger.getLogger(StudentMainForm.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            else{
-                JOptionPane.showMessageDialog(null, "Please enter a valid email", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            
-        }else{
-            JOptionPane.showMessageDialog(this, "You have not entered enough information");
-        }
-        
-        
-            
+                if ((Pattern.matches("^[a-zA-Z0-9]+[@]{1}+[a-zA-Z0-9]+[.]{1}+[a-zA-Z0-9]+$", txtEmail.getText()))){
 
+                        Student st = null;
+                    try {
+                        st = getModel();
+                    } catch (ParseException ex) {
+                        Logger.getLogger(StudentMainForm.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                        if(dao.add(st)>0){
+                            JOptionPane.showMessageDialog(this, "Save successfully");
+                            fillDataTABLE();
+                        }
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Please enter a valid email", "Error save", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            
+            }else{
+                JOptionPane.showMessageDialog(this, "You have not entered enough information");
+            }
+        } catch (NumberFormatException e) {
+            
+            JOptionPane.showMessageDialog(this, "you must type id with Integer datatype");
+        }
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
-        if (validateForm()){
-           if ((Pattern.matches("^[a-zA-Z0-9]+[@]{1}+[a-zA-Z0-9]+[.]{1}+[a-zA-Z0-9]+$", txtEmail.getText()))){
-                try {
-                    Student st = getModel();
-                    if (dao.updateStudentByID(st)>0){
-                    JOptionPane.showMessageDialog(this, "Update successfully");
-                    fillDataTABLE();
+        try {
+            if (validateForm()){
+                if ((Pattern.matches("^[a-zA-Z0-9]+[@]{1}+[a-zA-Z0-9]+[.]{1}+[a-zA-Z0-9]+$", txtEmail.getText()))){
+
+                        Student st = null;
+                    try {
+                        st = getModel();
+                    } catch (ParseException ex) {
+                        Logger.getLogger(StudentMainForm.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                } catch (ParseException ex) {
-                    Logger.getLogger(StudentMainForm.class.getName()).log(Level.SEVERE, null, ex);
+                        if (dao.updateStudentByID(st)>0){
+                        JOptionPane.showMessageDialog(this, "Update successfully");
+                        fillDataTABLE();
+                        }
+
+                    }else{
+                    JOptionPane.showMessageDialog(null, "Please enter a valid email", "Error update", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
-            
             }else{
-                JOptionPane.showMessageDialog(this, "you have not entered information");
+                JOptionPane.showMessageDialog(this, "You have not entered enough information");
+
             }
-        }else{
-            JOptionPane.showMessageDialog(this, "You have not entered enough information");
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "you must type id with Integer datatype");
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
@@ -539,7 +558,7 @@ public class StudentMainForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "You have not entered information to delete");
             
         }else{
-            if (dao.delStudentById(txtStudentId.getText())>0){
+            if (dao.delStudentById(Integer.parseInt(txtStudentId.getText()))>0){
                 JOptionPane.showMessageDialog(this, "Delete successfully");
                 fillDataTABLE();
             }else{
@@ -608,7 +627,7 @@ public class StudentMainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_rdFemaleActionPerformed
     public void setModel(Student st){
-        txtStudentId.setText(st.getStudentId());
+        txtStudentId.setText(st.getStudentId()+"");
         txtName.setText(st.getName());
         txtBirthday.setText(date_format.format(st.getBirthday()));
         txtAddress.setText(st.getAddress());
@@ -624,7 +643,7 @@ public class StudentMainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         int id = tbStudent.rowAtPoint(evt.getPoint());
         String studentid = tbStudent.getValueAt(id,0).toString();
-        Student st = dao.getStudentByID(studentid);
+        Student st = dao.getStudentByID(Integer.parseInt(studentid));
         setModel(st);
     }//GEN-LAST:event_tbStudentMouseClicked
 
@@ -704,8 +723,8 @@ public class StudentMainForm extends javax.swing.JFrame {
     private javax.swing.JTextArea txtAddress;
     private javax.swing.JTextField txtBirthday;
     private javax.swing.JTextField txtEmail;
-    private javax.swing.JTextField txtFind;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtStudentId;
+    private javax.swing.JTextField txtfind;
     // End of variables declaration//GEN-END:variables
 }

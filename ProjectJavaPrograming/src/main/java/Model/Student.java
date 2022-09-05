@@ -13,7 +13,7 @@ import java.util.Date;
  * @author thanh
  */
 public class Student implements Serializable{
-    private String StudentId;
+    private int StudentId;
     private String name;
     private Date birthday;
     private boolean sex;
@@ -23,7 +23,7 @@ public class Student implements Serializable{
     public Student() {
     }
 
-    public Student(String StudentId, String name, Date birthday, boolean sex, String address, String email) {
+    public Student(int StudentId, String name, Date birthday, boolean sex, String address, String email) {
         this.StudentId = StudentId;
         this.name = name;
         this.birthday = birthday;
@@ -32,13 +32,15 @@ public class Student implements Serializable{
         this.email = email;
     }
 
-    public String getStudentId() {
+    public int getStudentId() {
         return StudentId;
     }
 
-    public void setStudentId(String StudentId) {
+    public void setStudentId(int StudentId) {
         this.StudentId = StudentId;
     }
+
+    
 
     public String getName() {
         return name;

@@ -13,34 +13,35 @@ import java.util.List;
  * @author thanh
  */
 public class StudentDAO extends Student{
-    public ArrayList <Student> ls = new ArrayList<>();
-    public int add(Student st){
+    public ArrayList <Student> ls = new ArrayList<>(); //Statement to declare list student
+    public int add(Student st){ //This function adds student
         ls.add(st);
         return 1;
     }
     public List<Student> getAllStudent(){
         return ls;
     }
-    public int delStudentById(String ma){
+     public Student getStudentByID (int id){ 
+        for (Student st: ls){
+            if (st.getStudentId() == id){
+                return st;
+            }
+        }
+        return null;
+    }
+    public int delStudentById(int ma){
         for (Student st : ls){
-            if (st.getStudentId().equalsIgnoreCase(ma)){
+            if (st.getStudentId() == ma){ //This function passes a String parameter to enter the Student Id code, when it matches the Id you want, it will run and delete the student.
                 ls.remove(st);
                 return 1;
             }
         }
         return -1;
     }
-    public Student getStudentByID (String id){
-        for (Student st: ls){
-            if (st.getStudentId().equalsIgnoreCase(id)){
-                return st;
-            }
-        }
-        return null;
-    }
+   
     public int updateStudentByID(Student stNew){
         for (Student st : ls){
-            if(st.getStudentId().equalsIgnoreCase(stNew.getStudentId())){
+            if(st.getStudentId() == stNew.getStudentId()){
                 st.setAddress(stNew.getAddress());
                 st.setSex(stNew.isSex());
                 st.setBirthday(stNew.getBirthday());
